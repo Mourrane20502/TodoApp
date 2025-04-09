@@ -7,37 +7,45 @@ interface Todo {
 }
 
 interface PropsTodos {
-  todos: Todo[]; 
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>; 
+  todos: Todo[];
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
 export default function Todolist({ todos, setTodos }: PropsTodos) {
   const setToCompleted = (id: number) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, isCompleted: true } : todo 
+        todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo 
       )
     );
   };
 
   const deleteTask = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id)); 
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   return (
     <ul>
-      {todos.length === 0 &&(
-       <li className="h-full flex justify-center items-center font-bold ">Start by adding a todo</li>) }
+      {todos.length === 0 && (
+        <li className="h-full flex justify-center items-center font-bold">
+          Start by adding a todo
+        </li>
+      )}
+
       {todos.map((todo) => (
         <li
           key={todo.id}
-          onClick={() => setToCompleted(todo.id)} // Toggle completion on click
           className="flex justify-between items-center px-8 h-[50px] text-[14px] cursor-pointer border-b border-black/[0.08]"
         >
-          <span className={`${todo.isCompleted ? "line-through text-[#ccc]" : ""}`}>
+          <span
+            onClick={() => setToCompleted(todo.id)} 
+            className={`${
+              todo.isCompleted ? "line-through text-[#ccc]" : ""
+            }`}
+          >
             {todo.text}
           </span>
-          <DeleteButton deleteTask={() => deleteTask(todo.id)} /> 
+          <DeleteButton deleteTask={() => deleteTask(todo.id)} />
         </li>
       ))}
     </ul>
